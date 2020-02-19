@@ -1,0 +1,33 @@
+{
+  "name": "@amoy/draggify",
+  "moduleName": "draggify",
+  "version": "0.1.0",
+  "description": "pixi.js draggable extension",
+  "main": "dist/draggify.js",
+  "module": "dist/draggify.es.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "start": "NODE_ENV=development rollup -w -c rollup.config.js",
+    "dev": "NODE_ENV=development rollup -c rollup.config.js",
+    "prod": "NODE_ENV=production rollup -c rollup.config.js",
+    "publish": "rm -rf dist && npm run dev && npm run prod"
+  },
+  "repository": {
+    "url": "https://github.com/amoyjs/draggify.git",
+    "type": "git"
+  },
+  "author": "大板栗 <576839360@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "rollup-plugin-alias": "^2.0.1",
+    "rollup-plugin-babel-minify": "^9.1.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "tslib": "^1.10.0",
+    "typescript": "^3.6.3"
+  },
+  "peerDependencies": {
+    "pixi.js": "^5.1.5"
+  }
+}
