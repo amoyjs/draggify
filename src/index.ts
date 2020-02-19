@@ -1,3 +1,7 @@
+import Event from 'eventemitter3'
+
+const event = new Event()
+
 export function useDrag(target: PIXI.Container) {
     let isMoving = false
     let startLocal: any
@@ -16,14 +20,30 @@ export function useDrag(target: PIXI.Container) {
             fix(target)
         }
     })
-    target.on('touchend', () => {
+    target.on('touchend', (e: any) => {
         isMoving = false
+        event.emit('drop', e)
+    })
+}
+
+export function useDrop(target: PIXI.Container) {
+    target.interactive = true
+    event.on('drop', (e: any) => {
+        const position = e.data.global
+        const globalPosition = target.parent.toGlobal(target.position)
+        const xOK = position.x > globalPosition.x && position.x < globalPosition.x + target.width
+        const yOK = position.y > globalPosition.y && position.y < globalPosition.y + target.height
+        if (xOK && yOK) target.emit('drop', e)
     })
 }
 
 export default function draggify({ Container }: any) {
     Container.prototype.draggify = function() {
         useDrag(this)
+    }
+
+    Container.prototype.droppify = function() {
+        useDrop(this)
     }
 }
 

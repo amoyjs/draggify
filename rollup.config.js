@@ -35,7 +35,7 @@ const configure = {
         }),
         resolve(),
     ],
-    external: ['pixi.js'],
+    external: ['pixi.js', 'eventemitter3'],
 }
 
 if (isProd) {

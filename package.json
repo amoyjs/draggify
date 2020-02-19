@@ -1,7 +1,7 @@
 {
   "name": "@amoy/draggify",
   "moduleName": "draggify",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "pixi.js draggable extension",
   "main": "dist/draggify.js",
   "module": "dist/draggify.es.js",

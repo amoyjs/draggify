@@ -1,9 +1,12 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (global = global || self, factory(global.draggify = {}));
-}(this, function (exports) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('eventemitter3')) :
+    typeof define === 'function' && define.amd ? define(['exports', 'eventemitter3'], factory) :
+    (global = global || self, factory(global.draggify = {}, global.Event));
+}(this, function (exports, Event) { 'use strict';
 
+    Event = Event && Event.hasOwnProperty('default') ? Event['default'] : Event;
+
+    var event = new Event();
     function useDrag(target) {
         var isMoving = false;
         var startLocal;
@@ -24,14 +27,29 @@
                 fix(target);
             }
         });
-        target.on('touchend', function () {
+        target.on('touchend', function (e) {
             isMoving = false;
+            event.emit('drop', e);
+        });
+    }
+    function useDrop(target) {
+        target.interactive = true;
+        event.on('drop', function (e) {
+            var position = e.data.global;
+            var globalPosition = target.parent.toGlobal(target.position);
+            var xOK = position.x > globalPosition.x && position.x < globalPosition.x + target.width;
+            var yOK = position.y > globalPosition.y && position.y < globalPosition.y + target.height;
+            if (xOK && yOK)
+                target.emit('drop', e);
         });
     }
     function draggify(_a) {
         var Container = _a.Container;
         Container.prototype.draggify = function () {
             useDrag(this);
+        };
+        Container.prototype.droppify = function () {
+            useDrop(this);
         };
     }
     function fix(target) {
@@ -45,6 +63,7 @@
 
     exports.default = draggify;
     exports.useDrag = useDrag;
+    exports.useDrop = useDrop;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

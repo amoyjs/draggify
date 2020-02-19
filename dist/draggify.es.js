@@ -1,3 +1,6 @@
+import Event from 'eventemitter3';
+
+var event = new Event();
 function useDrag(target) {
     var isMoving = false;
     var startLocal;
@@ -18,14 +21,29 @@ function useDrag(target) {
             fix(target);
         }
     });
-    target.on('touchend', function () {
+    target.on('touchend', function (e) {
         isMoving = false;
+        event.emit('drop', e);
+    });
+}
+function useDrop(target) {
+    target.interactive = true;
+    event.on('drop', function (e) {
+        var position = e.data.global;
+        var globalPosition = target.parent.toGlobal(target.position);
+        var xOK = position.x > globalPosition.x && position.x < globalPosition.x + target.width;
+        var yOK = position.y > globalPosition.y && position.y < globalPosition.y + target.height;
+        if (xOK && yOK)
+            target.emit('drop', e);
     });
 }
 function draggify(_a) {
     var Container = _a.Container;
     Container.prototype.draggify = function () {
         useDrag(this);
+    };
+    Container.prototype.droppify = function () {
+        useDrop(this);
     };
 }
 function fix(target) {
@@ -38,5 +56,5 @@ function fix(target) {
 }
 
 export default draggify;
-export { useDrag };
+export { useDrag, useDrop };
 //# sourceMappingURL=draggify.es.js.map
