@@ -39,7 +39,7 @@
             var globalPosition = target.parent.toGlobal(target.position);
             var xOK = position.x > globalPosition.x && position.x < globalPosition.x + target.width;
             var yOK = position.y > globalPosition.y && position.y < globalPosition.y + target.height;
-            if (xOK && yOK)
+            if (xOK && yOK && target !== e.target)
                 target.emit('drop', e);
         });
     }

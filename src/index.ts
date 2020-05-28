@@ -33,7 +33,7 @@ export function useDrop(target: PIXI.Container) {
         const globalPosition = target.parent.toGlobal(target.position)
         const xOK = position.x > globalPosition.x && position.x < globalPosition.x + target.width
         const yOK = position.y > globalPosition.y && position.y < globalPosition.y + target.height
-        if (xOK && yOK) target.emit('drop', e)
+        if (xOK && yOK && target !== e.target) target.emit('drop', e)
     })
 }
 
